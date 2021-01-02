@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:the_farm/utils/math_utils.dart';
 import 'package:the_farm/widgets/actors/BaseActor.dart';
 
-const SIZE_MAX = 65;
-const SIZE_MIN = 50;
+const SIZE_MAX = 45;
+const SIZE_MIN = 20;
 const VELOCITY_MAX = 55;
-const VELOCITY_MIN = 20;
-const ACTOR_NUMBER = 5;
+const VELOCITY_MIN = 10;
+const ACTOR_NUMBER = 1;
 const HEADING_MIN = 0;
-const HEADING_MAX = 360;
+const HEADING_MAX = 90;
 // const HEADING_MIN = 180;
 // const HEADING_MAX = 270;
 

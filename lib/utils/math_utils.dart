@@ -15,6 +15,38 @@ double convertRadians2Degrees(double radians) => radians * 180.0 / pi;
 
 double nextXForActor(BaseActor actor) {
   double angle = actor.heading;
+  if (angle <= 90) {
+    // noop
+  } else if (angle <= 180) {
+    angle -= 90;
+  } else if (angle <= 270) {
+    angle -= 180;
+  } else {
+    angle -= 270;
+  }
+  double perc = angle / 90;
+  double stepSize = perc * actor.velocity;
+  print('[M@][math_utils] X ----------');
+  print('[M@][math_utils] angle $angle');
+  print('[M@][math_utils] perc $perc');
+  print('[M@][math_utils] actor.velocity ${actor.velocity}');
+  print('[M@][math_utils] stepSize $stepSize');
+  print('[M@][math_utils] actor.x + stepSize ${actor.x + stepSize}');
+  return actor.x + stepSize;
+}
+
+double nextYForActor(BaseActor actor) {
+  double perc = actor.heading / 90;
+  double stepSize = perc * actor.velocity;
+  print('[M@][math_utils] Y ----------');
+  print('[M@][math_utils] perc $perc');
+  print('[M@][math_utils] stepSize $stepSize');
+  print('[M@][math_utils] actor.x + stepSize ${actor.x + stepSize}');
+  return actor.y - stepSize;
+}
+
+double nextXForActorByMath(BaseActor actor) {
+  double angle = actor.heading;
   if (actor.isHeadingUp && actor.isHeadingRight) {
     // noop
   } else if (actor.isHeadingDown && actor.isHeadingRight) {
@@ -35,7 +67,7 @@ double nextXForActor(BaseActor actor) {
   return newX;
 }
 
-double nextYForActor(BaseActor actor) {
+double nextYForActorByMath(BaseActor actor) {
   double angle = actor.heading;
   if (actor.isHeadingUp && actor.isHeadingRight) {
     // noop
