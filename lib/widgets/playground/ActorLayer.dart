@@ -1,5 +1,11 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:the_farm/utils/math_utils.dart';
 import 'package:the_farm/widgets/actors/BaseActor.dart';
+
+const Color CURRENT_ACTOR_COLOR = Color(0xffffaa00);
+const Color NEXT_ACTOR_COLOR = Color(0x55aaaa00);
 
 class ActorLayer extends StatelessWidget {
   final List<BaseActor> actors;
@@ -19,22 +25,30 @@ class ActorLayer extends StatelessWidget {
     // return a list of containers wrapping our actors
     return List.generate(actors.length, (int index) {
       BaseActor actor = actors[index];
-      double halfSize = actor.size / 2;
-      return Positioned(
-        left: actor.position.dx - halfSize,
-        top: actor.position.dy - halfSize,
-        child: Container(
-          decoration: BoxDecoration(
-            color: actor.color ?? Colors.white60,
-            borderRadius: BorderRadius.all(
-              Radius.circular(actor.size / 2),
-            ),
-          ),
-          height: actor.size,
-          width: actor.size,
-        ),
+      return circle(
+        actor.position.dx,
+        actor.position.dy,
+        actor.color,
+        actor.size,
       );
     });
+  }
+
+  Widget circle(x, y, color, size) {
+    return Positioned(
+      left: x - size / 2,
+      top: y - size / 2,
+      child: Container(
+        decoration: BoxDecoration(
+          color: color ?? CURRENT_ACTOR_COLOR,
+          borderRadius: BorderRadius.all(
+            Radius.circular(size / 2),
+          ),
+        ),
+        height: size,
+        width: size,
+      ),
+    );
   }
 
   List<Widget> get actorOverlays {
@@ -45,23 +59,49 @@ class ActorLayer extends StatelessWidget {
     return List.generate(actors.length, (int index) {
       BaseActor actor = actors[index];
       return Positioned(
-        left: actor.position.dx + actor.size,
-        top: actor.position.dy - (actor.size),
+        left: actor.position.dx + (actor.size / 2),
+        top: actor.position.dy - (actor.size / 2),
         child: getInfoForActor(actor),
       );
     });
+  }
+
+  List<Widget> get actorNextSteps {
+    if (actors == null || actors.length < 1) {
+      return null;
+    }
+    // return a list of containers wrapping our actors
+    return List.generate(actors.length, (int index) {
+      BaseActor actor = actors[index];
+      return getNextStepForActor(actor);
+    });
+  }
+
+  Widget getNextStepForActor(BaseActor actor) {
+    double newX = nextXForActor(actor).toInt().toDouble();
+    double newY = nextYForActor(actor).toInt().toDouble();
+
+    return circle(
+      newX,
+      newY,
+      NEXT_ACTOR_COLOR,
+      actor.size,
+    );
   }
 
   Widget getInfoForActor(BaseActor actor) {
     if (actor == null) {
       return Container();
     }
+    var directionString =
+        ' [' + actor.heading.toString() + '-' + actor.directionString + ']';
     return Column(
       children: [
         Row(
           children: [
             Transform.rotate(
-              angle: actor.heading ?? 0,
+              // angle: actor.heading ?? 0,
+              angle: convertDegrees2Radians(actor.heading ?? 0),
               child: Image(
                 image: AssetImage('assets/up-arrow-plain.png'),
                 width: 10,
@@ -75,8 +115,15 @@ class ActorLayer extends StatelessWidget {
             Text(
               actor.velocity.toString(),
               style: TextStyle(
-                color: actor.color ?? Colors.white60,
-                fontSize: 11,
+                color: actor.color ?? Colors.white,
+                fontSize: 18,
+              ),
+            ),
+            Text(
+              directionString,
+              style: TextStyle(
+                color: actor.color ?? Colors.white,
+                fontSize: 14,
               ),
             ),
           ],
@@ -87,7 +134,7 @@ class ActorLayer extends StatelessWidget {
         Text(
           actor.position.dx.toString() + ', ' + actor.position.dy.toString(),
           style: TextStyle(
-            color: actor.color ?? Colors.white60,
+            color: actor.color ?? Colors.white,
             fontSize: 11,
           ),
         ),
@@ -98,9 +145,11 @@ class ActorLayer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<Widget> kids = [];
+
     kids.addAll(alignedActors);
 
     if (this.showOverlays) {
+      kids.addAll(actorNextSteps);
       kids.addAll(actorOverlays);
     }
 
