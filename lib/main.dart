@@ -36,6 +36,8 @@ class _MyHomePageState extends State<MyHomePage> {
     double heightScreen = MediaQuery.of(context).size.height;
     double width = widthScreen - widthScreen * .2;
     double height = heightScreen - heightScreen * .2;
+    game.size = Size(width, height);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
