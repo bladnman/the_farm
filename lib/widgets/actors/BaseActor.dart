@@ -5,15 +5,16 @@ class BaseActor {
   Color color;
   double xPercFloat;
   double yPercFloat;
-  double heading;
-  double speedPercSec;
+
+  double xSpeedPercFloat;
+  double ySpeedPercFloat;
   BaseActor({
     this.scale,
     this.color,
     this.xPercFloat,
     this.yPercFloat,
-    this.heading,
-    this.speedPercSec,
+    this.xSpeedPercFloat,
+    this.ySpeedPercFloat,
   });
 
   double get size {

@@ -23,15 +23,15 @@ class Playground extends StatelessWidget {
       width: finalWidth ?? 100,
       height: finalHeight ?? 100,
       child: Stack(children: [
-        // actors
-        ActorLayer(
-          actors: actors,
+        // background
+        Container(
+          color: this.color ?? Colors.black87,
           width: finalWidth,
           height: finalHeight,
         ),
-        // background
-        Container(
-          color: this.color ?? Colors.blueGrey,
+        // actors
+        ActorLayer(
+          actors: actors,
           width: finalWidth,
           height: finalHeight,
         ),

@@ -11,7 +11,7 @@ class GameEngine {
   }
   void _setup() {
     actors = [];
-    for (var i = 0; i < 20; i++) {
+    for (var i = 0; i < 5; i++) {
       addActor();
     }
   }
@@ -23,19 +23,38 @@ class GameEngine {
     // noop
   }
   void update() {
+    updateWallCollisions();
+
+    double pxPerSec = 0.05;
     // go through actors and update their positions, etc
     for (BaseActor actor in actors) {
-      actor.xPercFloat += actor.speedPercSec;
+      actor.xPercFloat += actor.xSpeedPercFloat * pxPerSec;
+      actor.yPercFloat += actor.ySpeedPercFloat * pxPerSec;
+    }
+  }
+
+  void updateWallCollisions() {
+    for (BaseActor actor in actors) {
+      if (actor.xPercFloat < 0.05 && actor.xPercFloat < 0) {
+        actor.xPercFloat *= -1;
+      } else if (actor.xPercFloat > 0.95 && actor.xPercFloat > 0) {
+        actor.xPercFloat *= -1;
+      }
+      if (actor.yPercFloat < 0.05 && actor.yPercFloat < 0) {
+        actor.yPercFloat *= -1;
+      } else if (actor.yPercFloat > 0.95 && actor.yPercFloat > 0) {
+        actor.yPercFloat *= -1;
+      }
     }
   }
 
   BaseActor getRandomActor() {
     return BaseActor(
-      xPercFloat: rand(100, 0) / 100,
-      yPercFloat: rand(100, 0) / 100,
-      scale: rand(30, 10) / 1,
-      heading: rand(360, 1) / 1,
-      speedPercSec: rand(30, 1) / 1000,
+      xPercFloat: rand(high: 100, low: 0) / 100, // 0.0 - 1.0
+      yPercFloat: rand(high: 100, low: 0) / 100, // 0.0 - 1.0
+      xSpeedPercFloat: (rand(high: 20, low: 0) / 10) - 1, // +1.0 thru -1.0
+      ySpeedPercFloat: (rand(high: 20, low: 0) / 10) - 1, // +1.0 thru -1.0
+      scale: rand(high: 30, low: 10) / 1,
     );
   }
 

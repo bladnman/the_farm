@@ -22,7 +22,7 @@ class ActorLayer extends StatelessWidget {
         top: height * actor.yPercFloat,
         child: Container(
           decoration: BoxDecoration(
-            color: actor.color ?? Colors.green,
+            color: actor.color ?? Colors.white60,
             borderRadius: BorderRadius.all(
               Radius.circular(actor.size / 2),
             ),

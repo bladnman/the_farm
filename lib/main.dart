@@ -51,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 });
               },
               child: Playground(
-                color: Colors.black38,
+                color: Colors.black87,
                 width: width,
                 height: height,
                 actors: game.actors,
