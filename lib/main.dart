@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:the_farm/GameEngine.dart';
 import 'package:the_farm/widgets/playground/Playground.dart';
@@ -30,8 +32,29 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   GameEngine game = GameEngine();
+  bool isActive = true;
+  Timer t;
+
+  void scheduleRedraw() {
+    // dis-schedule it
+    if (!isActive) {
+      t.cancel();
+      t = null;
+      return;
+    }
+    // already scheduled
+    if (t != null) return;
+
+    t = Timer.periodic(Duration(milliseconds: 30), (timer) {
+      setState(() {
+        game.update();
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    scheduleRedraw();
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
     double width = widthScreen - widthScreen * .2;
@@ -49,7 +72,7 @@ class _MyHomePageState extends State<MyHomePage> {
             FlatButton(
               onPressed: () {
                 setState(() {
-                  game.update();
+                  isActive = !isActive;
                 });
               },
               child: Playground(

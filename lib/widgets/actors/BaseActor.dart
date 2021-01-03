@@ -28,9 +28,7 @@ class BaseActor {
     var rad = atan2(velocity.dy, velocity.dx);
     var newHeading = convertRadians2Degrees(rad);
     if (newHeading < 0) {
-      print('[M@][BaseActor] UPDATE: B4 newHeading $newHeading');
       newHeading = (360.0 + newHeading);
-      print('[M@][BaseActor] UPDATE: AFTER newHeading $newHeading');
     }
     this.heading = newHeading.floorToDouble();
   }

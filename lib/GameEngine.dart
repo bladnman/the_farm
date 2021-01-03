@@ -4,8 +4,8 @@ import 'package:the_farm/widgets/actors/BaseActor.dart';
 
 const SIZE_MAX = 55;
 const SIZE_MIN = 30;
-const VELOCITY_MAX = 35;
-const VELOCITY_MIN = 7;
+const VELOCITY_MAX = 20;
+const VELOCITY_MIN = 4;
 const ACTOR_NUMBER = 7;
 const HEADING_MIN = 0;
 const HEADING_MAX = 90;
@@ -55,7 +55,6 @@ class GameEngine {
   }
 
   void updateWallCollisions() {
-    print('---- walls:');
     for (BaseActor actor in actors) {
       // touching RIGHT side
       if (actor.isHeadingRight && actor.rect.right >= size.width) {
@@ -67,7 +66,6 @@ class GameEngine {
       }
       // touching BOTTOM side
       if (actor.isHeadingDown && actor.rect.bottom >= size.height) {
-        print('[M@][GameEngine] hit bottom');
         actor.setVelocity(Offset(actor.velocity.dx, actor.velocity.dy * -1));
       }
       // touching TOP side

@@ -5,6 +5,9 @@ import 'package:the_farm/widgets/actors/BaseActor.dart';
 const Color CURRENT_ACTOR_COLOR = Color(0xffffaa00);
 const Color NEXT_ACTOR_COLOR = Color(0x55aaaa00);
 
+const SHOW_INFO_OVERLAY = false;
+const SHOW_ARROW_OVERLAY = true;
+
 class ActorLayer extends StatelessWidget {
   final List<BaseActor> actors;
   final double width;
@@ -14,7 +17,7 @@ class ActorLayer extends StatelessWidget {
     this.actors,
     this.width,
     this.height,
-    this.showOverlays = true,
+    this.showOverlays = false,
   });
   List<Widget> get alignedActors {
     if (actors == null || actors.length < 1) {
