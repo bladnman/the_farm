@@ -25,7 +25,7 @@ class Playground extends StatelessWidget {
       child: Stack(children: [
         // background
         Container(
-          color: this.color ?? Colors.black87,
+          color: this.color,
           width: finalWidth,
           height: finalHeight,
         ),

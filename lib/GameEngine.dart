@@ -2,16 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:the_farm/utils/math_utils.dart';
 import 'package:the_farm/widgets/actors/BaseActor.dart';
 
-const SIZE_MAX = 55;
-const SIZE_MIN = 30;
-const VELOCITY_MAX = 20;
-const VELOCITY_MIN = 4;
-const ACTOR_NUMBER = 7;
-const HEADING_MIN = 0;
-const HEADING_MAX = 90;
+const SIZE_MAX = 200;
+const SIZE_MIN = 80;
+const VELOCITY_MAX = 8;
+const VELOCITY_MIN = 1;
+const VELOCITY_SCALE = 0.5;
+const ACTOR_NUMBER = 5;
 
-// const HEADING_MIN = 180;
-// const HEADING_MAX = 270;
+const List<Color> actorColors = [
+  Color(0x99f7f052),
+  Color(0x998b2635),
+  Color(0x99f28123),
+  Color(0x99b4a0e5),
+  Color(0x9938726c),
+];
+
+// f7f052,8b2635,f28123,b4a0e5,38726c
 class GameEngine {
   Function onUpdate;
   List<BaseActor> actors = [];
@@ -30,7 +36,8 @@ class GameEngine {
     }
 
     for (var i = 0; i < ACTOR_NUMBER; i++) {
-      addActor();
+      Color color = actorColors[rand(high: actorColors.length - 1)];
+      addActor(color: color);
     }
   }
 
@@ -75,18 +82,21 @@ class GameEngine {
     }
   }
 
-  BaseActor getRandomActor() {
-    double vX = rand(high: VELOCITY_MAX, low: VELOCITY_MIN) / 1;
-    double vY = rand(high: VELOCITY_MAX, low: VELOCITY_MIN) / 1;
+  BaseActor getRandomActor({Color color}) {
+    double vX =
+        VELOCITY_SCALE * rand(high: VELOCITY_MAX, low: VELOCITY_MIN) / 1;
+    double vY =
+        VELOCITY_SCALE * rand(high: VELOCITY_MAX, low: VELOCITY_MIN) / 1;
     return BaseActor(
       position: _randPosition(),
       velocity: Offset(isHeads() ? vX : vX * -1, isHeads() ? vY : vY * -1),
       scale: rand(high: SIZE_MAX, low: SIZE_MIN) / 1,
+      color: color,
     );
   }
 
-  void addActor(/* eventaual def */) {
-    BaseActor actor = getRandomActor();
+  void addActor({Color color}) {
+    BaseActor actor = getRandomActor(color: color);
     actors.add(actor);
   }
 

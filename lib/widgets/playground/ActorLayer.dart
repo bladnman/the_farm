@@ -7,17 +7,16 @@ const Color NEXT_ACTOR_COLOR = Color(0x55aaaa00);
 
 const SHOW_INFO_OVERLAY = false;
 const SHOW_ARROW_OVERLAY = true;
+const SHOW_NEXT_STEP_OVERLAY = false;
 
 class ActorLayer extends StatelessWidget {
   final List<BaseActor> actors;
   final double width;
   final double height;
-  final bool showOverlays;
   ActorLayer({
     this.actors,
     this.width,
     this.height,
-    this.showOverlays = false,
   });
   List<Widget> get alignedActors {
     if (actors == null || actors.length < 1) {
@@ -62,14 +61,28 @@ class ActorLayer extends StatelessWidget {
       return Stack(
         children: [
           Positioned(
-            left: actor.position.dx - actor.scale * 0.3,
-            top: actor.position.dy - actor.scale * 0.3,
-            child: getDirectionArrow(actor: actor, size: actor.scale * 0.6),
-          ),
-          Positioned(
             left: actor.position.dx + (actor.size / 2),
             top: actor.position.dy - (actor.size / 2),
             child: getInfoForActor(actor),
+          ),
+        ],
+      );
+    });
+  }
+
+  List<Widget> get directionArrowOverlays {
+    if (actors == null || actors.length < 1) {
+      return null;
+    }
+    // return a list of containers wrapping our actors
+    return List.generate(actors.length, (int index) {
+      BaseActor actor = actors[index];
+      return Stack(
+        children: [
+          Positioned(
+            left: actor.position.dx - actor.scale * 0.3,
+            top: actor.position.dy - actor.scale * 0.3,
+            child: getDirectionArrow(actor: actor, size: actor.scale * 0.6),
           ),
         ],
       );
@@ -210,9 +223,14 @@ class ActorLayer extends StatelessWidget {
 
     kids.addAll(alignedActors);
 
-    if (this.showOverlays) {
+    if (SHOW_NEXT_STEP_OVERLAY) {
       kids.addAll(actorNextSteps);
+    }
+    if (SHOW_INFO_OVERLAY) {
       kids.addAll(actorOverlays);
+    }
+    if (SHOW_ARROW_OVERLAY) {
+      kids.addAll(directionArrowOverlays);
     }
 
     return Stack(children: kids);

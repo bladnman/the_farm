@@ -45,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // already scheduled
     if (t != null) return;
 
-    t = Timer.periodic(Duration(milliseconds: 30), (timer) {
+    t = Timer.periodic(Duration(milliseconds: 32), (timer) {
       setState(() {
         game.update();
       });
@@ -57,26 +57,30 @@ class _MyHomePageState extends State<MyHomePage> {
     scheduleRedraw();
     double widthScreen = MediaQuery.of(context).size.width;
     double heightScreen = MediaQuery.of(context).size.height;
-    double width = widthScreen - widthScreen * .2;
-    double height = heightScreen - heightScreen * .2;
+    double width = widthScreen;
+    double height = heightScreen;
     game.size = Size(width, height);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
+      // appBar: AppBar(
+      //   title: Text(widget.title),
+      // ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             FlatButton(
+              splashColor: Colors.transparent,
+              hoverColor: Colors.transparent,
+              highlightColor: Colors.transparent,
               onPressed: () {
                 setState(() {
                   isActive = !isActive;
                 });
               },
               child: Playground(
-                color: Colors.black87,
+                // color: Colors.black87,
+                // color: Colors.black87,
                 width: width,
                 height: height,
                 actors: game.actors,
