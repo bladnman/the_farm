@@ -1,26 +1,46 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:the_farm/utils/math_utils.dart';
 
 class BaseActor {
   double scale;
   Color color;
-  double heading;
-  double velocity;
   Offset position;
+  Offset velocity;
+  double heading;
 
   BaseActor({
     this.scale,
     this.color,
-    this.heading,
     this.velocity,
     this.position,
-  });
+  }) {
+    _calculateHeading();
+  }
+
+  void setVelocity(Offset velocity) {
+    this.velocity = velocity;
+    _calculateHeading();
+  }
+
+  void _calculateHeading() {
+    var rad = atan2(velocity.dy, velocity.dx);
+    var newHeading = convertRadians2Degrees(rad);
+    if (newHeading < 0) {
+      print('[M@][BaseActor] UPDATE: B4 newHeading $newHeading');
+      newHeading = (360.0 + newHeading);
+      print('[M@][BaseActor] UPDATE: AFTER newHeading $newHeading');
+    }
+    this.heading = newHeading.floorToDouble();
+  }
 
   double get size {
     return scale;
   }
 
   bool get isHeadingRight {
-    return heading >= 0 && heading <= 180;
+    return heading >= 270 || heading <= 90;
   }
 
   bool get isHeadingLeft {
@@ -28,7 +48,7 @@ class BaseActor {
   }
 
   bool get isHeadingDown {
-    return heading >= 90 && heading <= 270;
+    return heading >= 0 && heading <= 180;
   }
 
   bool get isHeadingUp {

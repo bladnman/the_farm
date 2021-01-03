@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:the_farm/utils/math_utils.dart';
 import 'package:the_farm/widgets/actors/BaseActor.dart';
 
-const SIZE_MAX = 45;
-const SIZE_MIN = 20;
-const VELOCITY_MAX = 55;
-const VELOCITY_MIN = 10;
-const ACTOR_NUMBER = 1;
+const SIZE_MAX = 55;
+const SIZE_MIN = 30;
+const VELOCITY_MAX = 35;
+const VELOCITY_MIN = 7;
+const ACTOR_NUMBER = 7;
 const HEADING_MIN = 0;
 const HEADING_MAX = 90;
+
 // const HEADING_MIN = 180;
 // const HEADING_MAX = 270;
-
 class GameEngine {
   Function onUpdate;
   List<BaseActor> actors = [];
@@ -49,12 +49,8 @@ class GameEngine {
 
     /// APPLY MOMENTUM
     for (BaseActor actor in actors) {
-      print('[M@][GameEngine] BEFORE actor.position $actor');
-
-      /// todo: determine how to apply angular momentum
       actor.position = Offset(nextXForActor(actor).toInt().toDouble(),
           nextYForActor(actor).toInt().toDouble());
-      print('[M@][GameEngine] AFTER actor.position $actor');
     }
   }
 
@@ -63,29 +59,30 @@ class GameEngine {
     for (BaseActor actor in actors) {
       // touching RIGHT side
       if (actor.isHeadingRight && actor.rect.right >= size.width) {
-        /// todo: how to we do an "inverse" of our right value
-        print('[M@][GameEngine] TOUCHING RIGHT $actor');
+        actor.setVelocity(Offset(actor.velocity.dx * -1, actor.velocity.dy));
       }
       // touching LEFT side
       else if (actor.isHeadingLeft && actor.rect.left <= 0) {
-        print('[M@][GameEngine] TOUCHING LEFT $actor');
+        actor.setVelocity(Offset(actor.velocity.dx * -1, actor.velocity.dy));
       }
       // touching BOTTOM side
       if (actor.isHeadingDown && actor.rect.bottom >= size.height) {
-        print('[M@][GameEngine] TOUCHING BOTTOM $actor');
+        print('[M@][GameEngine] hit bottom');
+        actor.setVelocity(Offset(actor.velocity.dx, actor.velocity.dy * -1));
       }
       // touching TOP side
       else if (actor.isHeadingUp && actor.rect.top <= 0) {
-        print('[M@][GameEngine] TOUCHING TOP $actor');
+        actor.setVelocity(Offset(actor.velocity.dx, actor.velocity.dy * -1));
       }
     }
   }
 
   BaseActor getRandomActor() {
+    double vX = rand(high: VELOCITY_MAX, low: VELOCITY_MIN) / 1;
+    double vY = rand(high: VELOCITY_MAX, low: VELOCITY_MIN) / 1;
     return BaseActor(
       position: _randPosition(),
-      velocity: rand(high: VELOCITY_MAX, low: VELOCITY_MIN) / 1,
-      heading: rand(high: HEADING_MAX, low: HEADING_MIN) / 1,
+      velocity: Offset(isHeads() ? vX : vX * -1, isHeads() ? vY : vY * -1),
       scale: rand(high: SIZE_MAX, low: SIZE_MIN) / 1,
     );
   }

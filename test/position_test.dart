@@ -7,16 +7,14 @@ void main() {
   test('Simple Actor', () {
     var actor = BaseActor(
       position: Offset(100, 100),
-      heading: 45,
-      velocity: 10,
+      velocity: Offset(10, 0),
     );
     expect(actor.heading, equals(45));
   });
   test('h0 x stays the same', () {
     var actor = BaseActor(
       position: Offset(100, 100),
-      heading: 0,
-      velocity: 10,
+      velocity: Offset(10, 0),
     );
 
     expect(actor.x, equals(100));
@@ -27,8 +25,7 @@ void main() {
   test('h90 x moves fully', () {
     var actor = BaseActor(
       position: Offset(100, 100),
-      heading: 90,
-      velocity: 10,
+      velocity: Offset(10, 0),
     );
 
     expect(actor.x, equals(100));
@@ -39,8 +36,7 @@ void main() {
   test('h180 x stays the same', () {
     var actor = BaseActor(
       position: Offset(100, 100),
-      heading: 180,
-      velocity: 10,
+      velocity: Offset(10, 0),
     );
 
     expect(actor.x, equals(100));
@@ -51,8 +47,7 @@ void main() {
   test('h270 x updates fully', () {
     var actor = BaseActor(
       position: Offset(100, 100),
-      heading: 270,
-      velocity: 10,
+      velocity: Offset(10, 0),
     );
 
     expect(actor.x, equals(100));

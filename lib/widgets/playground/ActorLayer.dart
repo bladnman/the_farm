@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:the_farm/utils/math_utils.dart';
 import 'package:the_farm/widgets/actors/BaseActor.dart';
@@ -58,10 +56,19 @@ class ActorLayer extends StatelessWidget {
     // return a list of containers wrapping our actors
     return List.generate(actors.length, (int index) {
       BaseActor actor = actors[index];
-      return Positioned(
-        left: actor.position.dx + (actor.size / 2),
-        top: actor.position.dy - (actor.size / 2),
-        child: getInfoForActor(actor),
+      return Stack(
+        children: [
+          Positioned(
+            left: actor.position.dx - actor.scale * 0.3,
+            top: actor.position.dy - actor.scale * 0.3,
+            child: getDirectionArrow(actor: actor, size: actor.scale * 0.6),
+          ),
+          Positioned(
+            left: actor.position.dx + (actor.size / 2),
+            top: actor.position.dy - (actor.size / 2),
+            child: getInfoForActor(actor),
+          ),
+        ],
       );
     });
   }
@@ -89,43 +96,95 @@ class ActorLayer extends StatelessWidget {
     );
   }
 
+  Widget getDirectionArrow(
+      {BaseActor actor, double size = 10, Color color = Colors.purple}) {
+    return Transform.rotate(
+      // angle: actor.heading ?? 0,
+      angle: convertDegrees2Radians(actor.heading + 90 ?? 0),
+      child: Image(
+        image: AssetImage('assets/up-arrow-plain.png'),
+        width: size,
+        height: size,
+        color: color,
+      ),
+    );
+  }
+
   Widget getInfoForActor(BaseActor actor) {
     if (actor == null) {
       return Container();
     }
-    var directionString =
-        ' [' + actor.heading.toString() + '-' + actor.directionString + ']';
     return Column(
       children: [
         Row(
           children: [
-            Transform.rotate(
-              // angle: actor.heading ?? 0,
-              angle: convertDegrees2Radians(actor.heading ?? 0),
-              child: Image(
-                image: AssetImage('assets/up-arrow-plain.png'),
-                width: 10,
-                height: 10,
-                color: Colors.green,
-              ),
-            ),
             SizedBox(
               width: 7,
             ),
-            Text(
-              actor.velocity.toString(),
-              style: TextStyle(
-                color: actor.color ?? Colors.white,
-                fontSize: 18,
-              ),
-            ),
-            Text(
-              directionString,
-              style: TextStyle(
-                color: actor.color ?? Colors.white,
-                fontSize: 14,
-              ),
-            ),
+            Row(
+              children: [
+                Column(
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          actor.directionString,
+                          style: TextStyle(
+                            color: actor.velocity.dx > 0
+                                ? Colors.green
+                                : Colors.red,
+                            fontSize: 14,
+                          ),
+                        ),
+                        Text(
+                          ' / ',
+                          style: TextStyle(
+                            color: actor.color ?? Colors.white,
+                            fontSize: 18,
+                          ),
+                        ),
+                        Text(
+                          actor.heading.toString(),
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 14,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          actor.velocity.dx.toString(),
+                          style: TextStyle(
+                            color: actor.velocity.dx > 0
+                                ? Colors.green
+                                : Colors.red,
+                            fontSize: 18,
+                          ),
+                        ),
+                        Text(
+                          ', ',
+                          style: TextStyle(
+                            color: actor.color ?? Colors.white,
+                            fontSize: 18,
+                          ),
+                        ),
+                        Text(
+                          actor.velocity.dy.toString(),
+                          style: TextStyle(
+                            color: actor.velocity.dy > 0
+                                ? Colors.green
+                                : Colors.red,
+                            fontSize: 18,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            )
           ],
         ),
         SizedBox(
